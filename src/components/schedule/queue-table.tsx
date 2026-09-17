@@ -1,0 +1,63 @@
+"use client";
+
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { RetryChainView } from "./retry-chain-view";
+import { useCancelCallSchedule } from "@/features/schedule/hooks";
+import { CALL_SCHEDULE_STATUS_LABELS } from "@/lib/constants";
+import { formatDateTime } from "@/lib/utils";
+import type { CallSchedule } from "@/features/schedule/types";
+import type { CallScheduleStatus } from "@/types/enums";
+
+const STATUS_TONE: Record<CallScheduleStatus, "success" | "warning" | "destructive" | "muted"> = {
+  pending: "muted",
+  in_progress: "warning",
+  completed: "success",
+  missed: "destructive",
+  cancelled: "destructive",
+};
+
+export function QueueTable({ items }: { items: CallSchedule[] }) {
+  const cancelSchedule = useCancelCallSchedule();
+
+  return (
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableHead>Scheduled for</TableHead>
+          <TableHead>Purpose</TableHead>
+          <TableHead>Status</TableHead>
+          <TableHead>Instructions</TableHead>
+          <TableHead />
+        </TableRow>
+      </TableHeader>
+      <TableBody>
+        {items.map((schedule) => (
+          <TableRow key={schedule.id}>
+            <TableCell>{formatDateTime(schedule.scheduled_at)}</TableCell>
+            <TableCell>
+              <RetryChainView schedule={schedule} />
+            </TableCell>
+            <TableCell>
+              <Badge tone={STATUS_TONE[schedule.status]}>{CALL_SCHEDULE_STATUS_LABELS[schedule.status]}</Badge>
+            </TableCell>
+            <TableCell className="max-w-xs truncate">{schedule.admin_instructions ?? "—"}</TableCell>
+            <TableCell>
+              {schedule.status === "pending" && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => cancelSchedule.mutate(schedule.id)}
+                  disabled={cancelSchedule.isPending}
+                >
+                  Cancel
+                </Button>
+              )}
+            </TableCell>
+          </TableRow>
+        ))}
+      </TableBody>
+    </Table>
+  );
+}
