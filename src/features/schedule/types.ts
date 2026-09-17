@@ -3,6 +3,8 @@ import type { CallPurpose, CallScheduleStatus, RequestedBy } from "@/types/enums
 export interface CallSchedule {
   id: string;
   person_id: string;
+  person_full_name?: string | null;
+  person_phone_number?: string | null;
   appointment_id?: string | null;
   scheduled_at: string;
   call_purpose: CallPurpose;

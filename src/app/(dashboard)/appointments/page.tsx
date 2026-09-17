@@ -63,6 +63,7 @@ export default function AppointmentsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Date &amp; time</TableHead>
+                <TableHead>Person</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Source</TableHead>
                 <TableHead>Notes</TableHead>
@@ -75,6 +76,18 @@ export default function AppointmentsPage() {
                     <Link href={`/appointments/${appointment.id}`} className="font-medium hover:underline">
                       {formatDateTime(appointment.appointment_datetime)}
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    {appointment.person_full_name ? (
+                      <Link href={`/persons/${appointment.person_id}`} className="hover:underline">
+                        {appointment.person_full_name}
+                      </Link>
+                    ) : (
+                      "—"
+                    )}
+                    {appointment.person_phone_number && (
+                      <p className="text-xs text-muted-foreground">{appointment.person_phone_number}</p>
+                    )}
                   </TableCell>
                   <TableCell>
                     <Badge tone={STATUS_TONE[appointment.status]}>

@@ -78,6 +78,7 @@ export default function CallsPage() {
             <TableHeader>
               <TableRow>
                 <TableHead>Date &amp; time</TableHead>
+                <TableHead>Person</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Outcome</TableHead>
@@ -91,6 +92,18 @@ export default function CallsPage() {
                     <Link href={`/calls/${call.id}`} className="font-medium hover:underline">
                       {formatDateTime(call.start_time ?? call.created_at)}
                     </Link>
+                  </TableCell>
+                  <TableCell>
+                    {call.person_full_name ? (
+                      <Link href={`/persons/${call.person_id}`} className="hover:underline">
+                        {call.person_full_name}
+                      </Link>
+                    ) : (
+                      "—"
+                    )}
+                    {call.person_phone_number && (
+                      <p className="text-xs text-muted-foreground">{call.person_phone_number}</p>
+                    )}
                   </TableCell>
                   <TableCell>{CALL_TYPE_LABELS[call.call_type]}</TableCell>
                   <TableCell>

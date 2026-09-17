@@ -3,6 +3,8 @@ import type { AppointmentStatus, BookingSource } from "@/types/enums";
 export interface Appointment {
   id: string;
   person_id: string;
+  person_full_name?: string | null;
+  person_phone_number?: string | null;
   appointment_datetime: string;
   duration_minutes?: number | null;
   status: AppointmentStatus;
