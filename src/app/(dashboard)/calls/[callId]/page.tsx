@@ -42,7 +42,7 @@ export default function CallDetailPage() {
                 <dt className="text-muted-foreground">Person</dt>
                 <dd>
                   <a href={`/persons/${person.id}`} className="hover:underline">
-                    {person.full_name} ({person.phone_number})
+                    {person.full_name ? `${person.full_name} (${person.phone_number})` : person.phone_number}
                   </a>
                 </dd>
               </>

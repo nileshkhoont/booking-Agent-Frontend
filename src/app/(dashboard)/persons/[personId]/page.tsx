@@ -31,8 +31,8 @@ export default function PersonDetailPage() {
     <div className="max-w-3xl">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h1 className="text-xl font-semibold">{person.full_name}</h1>
-          <p className="text-sm text-muted-foreground">{person.phone_number}</p>
+          <h1 className="text-xl font-semibold">{person.full_name || person.phone_number}</h1>
+          {person.full_name && <p className="text-sm text-muted-foreground">{person.phone_number}</p>}
         </div>
         <Button onClick={() => setDialogOpen(true)}>Book appointment</Button>
       </div>

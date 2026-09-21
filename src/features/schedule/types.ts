@@ -12,9 +12,6 @@ export interface CallSchedule {
   source_call_id?: string | null;
   admin_instructions?: string | null;
   status: CallScheduleStatus;
-  attempt_number: number;
-  max_attempts: number;
-  parent_schedule_id?: string | null;
   created_by?: string | null;
   edesy_call_id?: string | null;
   created_at: string;

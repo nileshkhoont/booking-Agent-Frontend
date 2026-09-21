@@ -63,7 +63,7 @@ export function ScheduleCallForm() {
               <option value="">Select a person…</option>
               {personResults.items.map((person) => (
                 <option key={person.id} value={person.id}>
-                  {person.full_name} ({person.phone_number})
+                  {person.full_name ? `${person.full_name} (${person.phone_number})` : person.phone_number}
                 </option>
               ))}
             </Select>

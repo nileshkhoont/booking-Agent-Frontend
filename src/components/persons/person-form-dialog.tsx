@@ -12,7 +12,7 @@ import { useCreatePerson } from "@/features/persons/hooks";
 import { ApiError } from "@/lib/api-client";
 
 const schema = z.object({
-  full_name: z.string().min(1, "Full name is required"),
+  full_name: z.string().optional(),
   phone_number: z.string().min(6, "Enter a valid phone number (E.164, e.g. +919876543210)"),
   email: z.string().email().optional().or(z.literal("")),
   notes: z.string().optional(),
@@ -31,7 +31,7 @@ export function PersonFormDialog({ open, onClose }: { open: boolean; onClose: ()
 
   function onSubmit(values: FormValues) {
     createPerson.mutate(
-      { ...values, email: values.email || undefined },
+      { ...values, full_name: values.full_name || undefined, email: values.email || undefined },
       {
         onSuccess: () => {
           reset();
@@ -50,7 +50,7 @@ export function PersonFormDialog({ open, onClose }: { open: boolean; onClose: ()
           />
         )}
         <div className="flex flex-col gap-1.5">
-          <Label htmlFor="full_name">Full name</Label>
+          <Label htmlFor="full_name">Full name (optional)</Label>
           <Input id="full_name" {...register("full_name")} />
           {errors.full_name && <p className="text-xs text-destructive">{errors.full_name.message}</p>}
         </div>

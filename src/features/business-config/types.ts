@@ -11,7 +11,7 @@ export interface Holiday {
 export interface BusinessConfig {
   id: string;
   working_days: string[];
-  working_hours?: WorkingHours | null;
+  working_hours: WorkingHours[];
   slot_duration_minutes?: number | null;
   buffer_minutes?: number | null;
   holidays: Holiday[];

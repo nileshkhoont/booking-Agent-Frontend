@@ -8,7 +8,7 @@ export interface Address {
 
 export interface Person {
   id: string;
-  full_name: string;
+  full_name?: string | null;
   phone_number: string;
   alternate_phone?: string | null;
   email?: string | null;
@@ -22,7 +22,7 @@ export interface Person {
 }
 
 export interface PersonCreatePayload {
-  full_name: string;
+  full_name?: string;
   phone_number: string;
   alternate_phone?: string;
   email?: string;
