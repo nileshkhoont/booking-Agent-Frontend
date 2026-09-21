@@ -1,11 +1,11 @@
 "use client";
 
+import Link from "next/link";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { RetryChainView } from "./retry-chain-view";
 import { useCancelCallSchedule } from "@/features/schedule/hooks";
-import { CALL_SCHEDULE_STATUS_LABELS } from "@/lib/constants";
+import { CALL_PURPOSE_LABELS, CALL_SCHEDULE_STATUS_LABELS } from "@/lib/constants";
 import { formatDateTime } from "@/lib/utils";
 import type { CallSchedule } from "@/features/schedule/types";
 import type { CallScheduleStatus } from "@/types/enums";
@@ -26,6 +26,7 @@ export function QueueTable({ items }: { items: CallSchedule[] }) {
       <TableHeader>
         <TableRow>
           <TableHead>Scheduled for</TableHead>
+          <TableHead>Person</TableHead>
           <TableHead>Purpose</TableHead>
           <TableHead>Status</TableHead>
           <TableHead>Instructions</TableHead>
@@ -37,7 +38,19 @@ export function QueueTable({ items }: { items: CallSchedule[] }) {
           <TableRow key={schedule.id}>
             <TableCell>{formatDateTime(schedule.scheduled_at)}</TableCell>
             <TableCell>
-              <RetryChainView schedule={schedule} />
+              {schedule.person_full_name ? (
+                <Link href={`/persons/${schedule.person_id}`} className="hover:underline">
+                  {schedule.person_full_name}
+                </Link>
+              ) : (
+                "—"
+              )}
+              {schedule.person_phone_number && (
+                <p className="text-xs text-muted-foreground">{schedule.person_phone_number}</p>
+              )}
+            </TableCell>
+            <TableCell>
+              <Badge tone="muted">{CALL_PURPOSE_LABELS[schedule.call_purpose]}</Badge>
             </TableCell>
             <TableCell>
               <Badge tone={STATUS_TONE[schedule.status]}>{CALL_SCHEDULE_STATUS_LABELS[schedule.status]}</Badge>

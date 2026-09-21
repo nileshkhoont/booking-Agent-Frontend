@@ -4,6 +4,8 @@ export interface Call {
   id: string;
   call_schedule_id?: string | null;
   person_id: string;
+  person_full_name?: string | null;
+  person_phone_number?: string | null;
   appointment_id?: string | null;
   call_type: CallType;
   direction: Direction;

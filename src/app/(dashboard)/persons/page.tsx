@@ -68,7 +68,7 @@ export default function PersonsPage() {
                 <TableRow key={person.id}>
                   <TableCell>
                     <Link href={`/persons/${person.id}`} className="font-medium hover:underline">
-                      {person.full_name}
+                      {person.full_name || person.phone_number}
                     </Link>
                   </TableCell>
                   <TableCell>{person.phone_number}</TableCell>

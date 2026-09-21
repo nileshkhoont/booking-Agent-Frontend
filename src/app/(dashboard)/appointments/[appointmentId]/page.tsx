@@ -48,9 +48,9 @@ export default function AppointmentDetailPage() {
             <p className="text-sm text-muted-foreground">
               For{" "}
               <a href={`/persons/${person.id}`} className="text-foreground hover:underline">
-                {person.full_name}
-              </a>{" "}
-              ({person.phone_number})
+                {person.full_name || person.phone_number}
+              </a>
+              {person.full_name && ` (${person.phone_number})`}
             </p>
           )}
 
