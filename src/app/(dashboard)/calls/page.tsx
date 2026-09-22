@@ -4,12 +4,14 @@ import { useState } from "react";
 import Link from "next/link";
 import { Select } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { ErrorBanner } from "@/components/common/error-banner";
 import { EmptyState } from "@/components/common/empty-state";
 import { Pagination } from "@/components/common/pagination";
 import { CallStatusBadge } from "@/components/calls/call-status-badge";
+import { CallDetailModal } from "@/components/calls/call-detail-modal";
 import { useCalls } from "@/features/calls/hooks";
 import { CALL_OUTCOME_LABELS, CALL_TYPE_LABELS } from "@/lib/constants";
 import { formatDateTime, istDateInputEndOfDayToUtcIso, istDateInputToUtcIso } from "@/lib/utils";
@@ -22,6 +24,7 @@ export default function CallsPage() {
   const [callStatus, setCallStatus] = useState<CallStatus | "">("");
   const [outcome, setOutcome] = useState<CallOutcome | "">("");
   const [page, setPage] = useState(1);
+  const [viewCallId, setViewCallId] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useCalls({
     date_from: dateFrom ? istDateInputToUtcIso(dateFrom) : undefined,
@@ -81,8 +84,8 @@ export default function CallsPage() {
                 <TableHead>Person</TableHead>
                 <TableHead>Type</TableHead>
                 <TableHead>Status</TableHead>
-                <TableHead>Outcome</TableHead>
                 <TableHead>Duration</TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -109,8 +112,12 @@ export default function CallsPage() {
                   <TableCell>
                     <CallStatusBadge status={call.call_status} />
                   </TableCell>
-                  <TableCell>{call.outcome ? CALL_OUTCOME_LABELS[call.outcome] : "—"}</TableCell>
                   <TableCell>{call.duration_seconds ? `${call.duration_seconds}s` : "—"}</TableCell>
+                  <TableCell>
+                    <Button variant="outline" size="sm" onClick={() => setViewCallId(call.id)}>
+                      View more
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -118,6 +125,8 @@ export default function CallsPage() {
           <Pagination page={page} pageSize={20} total={data.total} onPageChange={setPage} />
         </>
       )}
+
+      <CallDetailModal callId={viewCallId} open={viewCallId !== null} onClose={() => setViewCallId(null)} />
     </div>
   );
 }
