@@ -22,15 +22,13 @@ export default function CallDetailPage() {
 
   return (
     <div className="max-w-3xl">
-      <h1 className="mb-6 text-xl font-semibold">Call detail</h1>
-
       <Card className="mb-4">
         <CardContent className="flex flex-col gap-3 pt-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-lg font-medium">{formatDateTime(call.start_time ?? call.created_at)}</p>
             <CallStatusBadge status={call.call_status} />
           </div>
-          <dl className="grid grid-cols-2 gap-2 text-sm">
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
             <dt className="text-muted-foreground">Type</dt>
             <dd>{CALL_TYPE_LABELS[call.call_type]}</dd>
             <dt className="text-muted-foreground">Outcome</dt>

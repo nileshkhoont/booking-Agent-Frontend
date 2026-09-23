@@ -10,6 +10,7 @@ export interface CallFilters {
   call_status?: CallStatus;
   outcome?: CallOutcome;
   person_id?: string;
+  q?: string;
   page?: number;
   page_size?: number;
 }

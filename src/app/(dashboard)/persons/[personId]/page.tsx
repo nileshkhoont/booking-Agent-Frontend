@@ -29,16 +29,20 @@ export default function PersonDetailPage() {
 
   return (
     <div className="max-w-3xl">
-      <div className="mb-6 flex items-center justify-between">
-        <div>
-          <h1 className="text-xl font-semibold">{person.full_name || person.phone_number}</h1>
+      <div className="mb-6 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+        <div className="min-w-0">
+          <h2 className="truncate text-xl font-semibold tracking-tight sm:text-2xl">
+            {person.full_name || person.phone_number}
+          </h2>
           {person.full_name && <p className="text-sm text-muted-foreground">{person.phone_number}</p>}
         </div>
-        <Button onClick={() => setDialogOpen(true)}>Book appointment</Button>
+        <Button onClick={() => setDialogOpen(true)} className="shrink-0">
+          Book appointment
+        </Button>
       </div>
 
       <Card className="mb-6">
-        <CardContent className="grid grid-cols-2 gap-2 pt-6 text-sm">
+        <CardContent className="grid grid-cols-1 gap-x-4 gap-y-2 pt-6 text-sm sm:grid-cols-2">
           <span className="text-muted-foreground">Email</span>
           <span>{person.email ?? "—"}</span>
           <span className="text-muted-foreground">Alternate phone</span>
@@ -59,7 +63,7 @@ export default function PersonDetailPage() {
           <Link
             key={appointment.id}
             href={`/appointments/${appointment.id}`}
-            className="flex items-center justify-between rounded-md border border-border p-3 text-sm hover:bg-muted"
+            className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border p-3 text-sm transition-colors hover:bg-muted"
           >
             <span>{formatDateTime(appointment.appointment_datetime)}</span>
             <Badge tone={appointment.status === "cancelled" ? "destructive" : "success"}>
@@ -76,7 +80,7 @@ export default function PersonDetailPage() {
           <Link
             key={call.id}
             href={`/calls/${call.id}`}
-            className="flex items-center justify-between rounded-md border border-border p-3 text-sm hover:bg-muted"
+            className="flex flex-wrap items-center justify-between gap-2 rounded-md border border-border p-3 text-sm transition-colors hover:bg-muted"
           >
             <span>
               {formatDateTime(call.start_time ?? call.created_at)} — {CALL_TYPE_LABELS[call.call_type]}

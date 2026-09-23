@@ -42,7 +42,7 @@ export function PersonFormDialog({ open, onClose }: { open: boolean; onClose: ()
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title="Add person">
+    <Dialog open={open} onClose={onClose} title="Add person" closeOnBackdropClick={false}>
       <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
         {createPerson.isError && (
           <ErrorBanner

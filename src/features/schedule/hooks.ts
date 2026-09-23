@@ -6,6 +6,7 @@ import type { CallScheduleCreatePayload } from "./types";
 export function useCallSchedules(params: {
   status?: CallScheduleStatus;
   call_purpose?: CallPurpose;
+  q?: string;
   page?: number;
   page_size?: number;
 }) {

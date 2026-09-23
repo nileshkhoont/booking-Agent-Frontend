@@ -2,7 +2,10 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { Search } from "lucide-react";
 import { Select } from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
@@ -10,8 +13,12 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { ErrorBanner } from "@/components/common/error-banner";
 import { EmptyState } from "@/components/common/empty-state";
 import { Pagination } from "@/components/common/pagination";
+import { FilterButton } from "@/components/common/filter-button";
+import { FilterDialog } from "@/components/common/filter-dialog";
+import { ListCard } from "@/components/common/list-card";
 import { CallDetailModal } from "@/components/calls/call-detail-modal";
 import { useAppointments } from "@/features/appointments/hooks";
+import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { APPOINTMENT_STATUS_LABELS } from "@/lib/constants";
 import { formatDateTime } from "@/lib/utils";
 import type { AppointmentStatus } from "@/types/enums";
@@ -25,44 +32,70 @@ const STATUS_TONE: Record<AppointmentStatus, "success" | "warning" | "destructiv
 };
 
 export default function AppointmentsPage() {
+  const [search, setSearch] = useState("");
   const [status, setStatus] = useState<AppointmentStatus | "">("");
+  const [draftStatus, setDraftStatus] = useState<AppointmentStatus | "">("");
+  const [filterOpen, setFilterOpen] = useState(false);
   const [page, setPage] = useState(1);
   const [viewCallId, setViewCallId] = useState<string | null | undefined>(undefined);
+  const debouncedSearch = useDebouncedValue(search);
 
   const { data, isLoading, isError } = useAppointments({
     status: status || undefined,
+    q: debouncedSearch || undefined,
     page,
     page_size: 20,
   });
 
+  function openFilters() {
+    setDraftStatus(status);
+    setFilterOpen(true);
+  }
+
+  function applyFilters() {
+    setStatus(draftStatus);
+    setPage(1);
+    setFilterOpen(false);
+  }
+
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Appointments</h1>
-        <Select
-          value={status}
-          onChange={(e) => {
-            setStatus(e.target.value as AppointmentStatus | "");
-            setPage(1);
-          }}
-          className="w-48"
-        >
-          <option value="">All statuses</option>
-          {Object.entries(APPOINTMENT_STATUS_LABELS).map(([value, label]) => (
-            <option key={value} value={value}>
-              {label}
-            </option>
-          ))}
-        </Select>
-      </div>
+    <div className="flex h-full min-h-0 flex-col">
+      <ListCard
+        toolbarClassName="justify-between"
+        toolbar={
+          <>
+            <div className="relative w-full max-w-sm">
+              <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+              <Input
+                placeholder="Search by person name or phone number"
+                value={search}
+                onChange={(e) => {
+                  setSearch(e.target.value);
+                  setPage(1);
+                }}
+                className="pl-9"
+              />
+            </div>
+            <FilterButton activeCount={status ? 1 : 0} onClick={openFilters} />
+          </>
+        }
+      >
+        {isLoading && <LoadingSpinner className="flex-1" />}
+        {isError && (
+          <div className="p-4">
+            <ErrorBanner message="Failed to load appointments" />
+          </div>
+        )}
+        {data && data.items.length === 0 && (
+          <div className="flex flex-1 items-center justify-center p-6">
+            <EmptyState title="No appointments found" />
+          </div>
+        )}
 
-      {isLoading && <LoadingSpinner />}
-      {isError && <ErrorBanner message="Failed to load appointments" />}
-      {data && data.items.length === 0 && <EmptyState title="No appointments found" />}
-
-      {data && data.items.length > 0 && (
-        <>
-          <Table>
+        {data && data.items.length > 0 && (
+          <>
+          <div className="min-h-0 flex-1">
+          <Table fillHeight bare>
             <TableHeader>
               <TableRow>
                 <TableHead>Date &amp; time</TableHead>
@@ -111,15 +144,40 @@ export default function AppointmentsPage() {
               ))}
             </TableBody>
           </Table>
+          </div>
           <Pagination page={page} pageSize={20} total={data.total} onPageChange={setPage} />
-        </>
-      )}
+          </>
+        )}
+      </ListCard>
 
       <CallDetailModal
         callId={viewCallId}
         open={viewCallId !== undefined}
         onClose={() => setViewCallId(undefined)}
       />
+
+      <FilterDialog
+        open={filterOpen}
+        onClose={() => setFilterOpen(false)}
+        onApply={applyFilters}
+        onClear={() => setDraftStatus("")}
+        title="Filter appointments"
+      >
+        <div className="flex flex-col gap-1.5 sm:col-span-2">
+          <Label>Status</Label>
+          <Select
+            value={draftStatus}
+            onChange={(e) => setDraftStatus(e.target.value as AppointmentStatus | "")}
+          >
+            <option value="">All statuses</option>
+            {Object.entries(APPOINTMENT_STATUS_LABELS).map(([value, label]) => (
+              <option key={value} value={value}>
+                {label}
+              </option>
+            ))}
+          </Select>
+        </div>
+      </FilterDialog>
     </div>
   );
 }

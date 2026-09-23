@@ -1,0 +1,88 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">
+  <defs>
+    <radialGradient id="blobIndigo" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="hsl(243 75% 59%)" stop-opacity="0.22" />
+      <stop offset="100%" stop-color="hsl(243 75% 59%)" stop-opacity="0" />
+    </radialGradient>
+    <radialGradient id="blobTeal" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="hsl(189 85% 35%)" stop-opacity="0.18" />
+      <stop offset="100%" stop-color="hsl(189 85% 35%)" stop-opacity="0" />
+    </radialGradient>
+    <linearGradient id="waveFade" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="hsl(243 75% 59%)" stop-opacity="0" />
+      <stop offset="20%" stop-color="hsl(243 75% 59%)" stop-opacity="0.5" />
+      <stop offset="80%" stop-color="hsl(189 85% 35%)" stop-opacity="0.5" />
+      <stop offset="100%" stop-color="hsl(189 85% 35%)" stop-opacity="0" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="1000" fill="hsl(210 20% 98%)" />
+
+  <!-- soft ambient color blobs, corner-anchored so the centered login card sits in calm space -->
+  <circle cx="120" cy="140" r="480" fill="url(#blobIndigo)" />
+  <circle cx="1480" cy="880" r="520" fill="url(#blobTeal)" />
+  <circle cx="1420" cy="80" r="260" fill="url(#blobIndigo)" />
+
+  <!-- large watermark phone-call glyph, bottom-left, mostly off-canvas -->
+  <g transform="translate(-60,620) rotate(-8)" opacity="0.05">
+    <path d="M40 40c0-11 9-20 20-20h60c8 0 15 5 18 13l14 35c3 8 1 17-6 22l-24 18c17 40 48 71 88 88l18-24c5-7 14-9 22-6l35 14c8 3 13 10 13 18v60c0 11-9 20-20 20-121 0-238-96-238-238z"
+      fill="hsl(243 75% 59%)" stroke="none" transform="scale(2.6)" />
+  </g>
+
+  <!-- voice waveform band -->
+  <g transform="translate(180,500)" opacity="0.5">
+    <rect x="0" y="-4" width="1240" height="8" rx="4" fill="url(#waveFade)" opacity="0.15" />
+    <g stroke="url(#waveFade)" stroke-width="6" stroke-linecap="round">
+      <line x1="0"    y1="-6"  x2="0"    y2="6" />
+      <line x1="40"   y1="-14" x2="40"   y2="14" />
+      <line x1="80"   y1="-24" x2="80"   y2="24" />
+      <line x1="120"  y1="-10" x2="120"  y2="10" />
+      <line x1="160"  y1="-34" x2="160"  y2="34" />
+      <line x1="200"  y1="-18" x2="200"  y2="18" />
+      <line x1="240"  y1="-46" x2="240"  y2="46" />
+      <line x1="280"  y1="-22" x2="280"  y2="22" />
+      <line x1="320"  y1="-58" x2="320"  y2="58" />
+      <line x1="360"  y1="-30" x2="360"  y2="30" />
+      <line x1="400"  y1="-64" x2="400"  y2="64" />
+      <line x1="440"  y1="-26" x2="440"  y2="26" />
+      <line x1="480"  y1="-48" x2="480"  y2="48" />
+      <line x1="520"  y1="-16" x2="520"  y2="16" />
+      <line x1="560"  y1="-36" x2="560"  y2="36" />
+      <line x1="600"  y1="-20" x2="600"  y2="20" />
+      <line x1="640"  y1="-52" x2="640"  y2="52" />
+      <line x1="680"  y1="-28" x2="680"  y2="28" />
+      <line x1="720"  y1="-60" x2="720"  y2="60" />
+      <line x1="760"  y1="-32" x2="760"  y2="32" />
+      <line x1="800"  y1="-44" x2="800"  y2="44" />
+      <line x1="840"  y1="-18" x2="840"  y2="18" />
+      <line x1="880"  y1="-38" x2="880"  y2="38" />
+      <line x1="920"  y1="-14" x2="920"  y2="14" />
+      <line x1="960"  y1="-28" x2="960"  y2="28" />
+      <line x1="1000" y1="-12" x2="1000" y2="12" />
+      <line x1="1040" y1="-22" x2="1040" y2="22" />
+      <line x1="1080" y1="-8"  x2="1080" y2="8" />
+      <line x1="1120" y1="-16" x2="1120" y2="16" />
+      <line x1="1160" y1="-6"  x2="1160" y2="6" />
+      <line x1="1200" y1="-4"  x2="1200" y2="4" />
+      <line x1="1240" y1="-2"  x2="1240" y2="2" />
+    </g>
+  </g>
+
+  <!-- sparse network / AI node dots, connected by thin lines -->
+  <g opacity="0.16" stroke="hsl(243 75% 59%)" stroke-width="1.5" fill="hsl(189 85% 35%)">
+    <line x1="150" y1="760" x2="330" y2="700" />
+    <line x1="330" y1="700" x2="470" y2="800" />
+    <line x1="330" y1="700" x2="360" y2="560" />
+    <line x1="1220" y1="220" x2="1360" y2="150" />
+    <line x1="1220" y1="220" x2="1300" y2="330" />
+    <line x1="1360" y1="150" x2="1500" y2="210" />
+    <circle cx="150" cy="760" r="6" />
+    <circle cx="330" cy="700" r="8" />
+    <circle cx="470" cy="800" r="5" />
+    <circle cx="360" cy="560" r="5" />
+    <circle cx="1220" cy="220" r="6" />
+    <circle cx="1360" cy="150" r="7" />
+    <circle cx="1300" cy="330" r="5" />
+    <circle cx="1500" cy="210" r="5" />
+  </g>
+</svg>

@@ -11,7 +11,7 @@ import { useBusinessConfig, useUpdateBusinessConfig } from "@/features/business-
 import { computeSlotPreview } from "@/features/business-config/slot-preview";
 import type { WorkingHours } from "@/features/business-config/types";
 import { ApiError } from "@/lib/api-client";
-import { formatDate } from "@/lib/utils";
+import { cn, formatDate } from "@/lib/utils";
 
 const ALL_DAYS = ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"];
 
@@ -72,7 +72,6 @@ export default function BusinessConfigSettingsPage() {
 
   return (
     <div className="max-w-xl">
-      <h1 className="mb-2 text-xl font-semibold">Business hours</h1>
       <p className="mb-6 text-sm text-muted-foreground">
         Drives every slot-availability check — for the admin dashboard and the AI agent alike.
       </p>
@@ -93,11 +92,13 @@ export default function BusinessConfigSettingsPage() {
                 key={day}
                 type="button"
                 onClick={() => toggleDay(day)}
-                className={`rounded-full border px-3 py-1 text-xs capitalize ${
+                aria-pressed={workingDays.includes(day)}
+                className={cn(
+                  "rounded-full border px-3 py-1 text-xs font-medium capitalize transition-colors",
                   workingDays.includes(day)
-                    ? "border-primary bg-primary text-primary-foreground"
-                    : "border-border bg-transparent"
-                }`}
+                    ? "border-accent bg-accent text-accent-foreground"
+                    : "border-border bg-transparent text-muted-foreground hover:border-accent/40 hover:text-foreground",
+                )}
               >
                 {day}
               </button>
@@ -116,7 +117,7 @@ export default function BusinessConfigSettingsPage() {
         </div>
 
         <div>
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <Label>Time windows</Label>
             <Button type="button" variant="outline" size="sm" onClick={addWindow}>
               + Add time window
@@ -132,7 +133,7 @@ export default function BusinessConfigSettingsPage() {
               const preview = computeSlotPreview(window.start ?? "", window.end ?? "", duration);
               return (
                 <div key={index} className="rounded-md border border-border p-3">
-                  <div className="flex items-end gap-3">
+                  <div className="flex flex-wrap items-end gap-3">
                     <div className="flex flex-col gap-1.5">
                       <Label>Opens at</Label>
                       <Input
@@ -191,7 +192,7 @@ export default function BusinessConfigSettingsPage() {
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="flex flex-col gap-1.5">
             <Label>Buffer between slots (minutes)</Label>
             <Input type="number" value={bufferMinutes} onChange={(e) => setBufferMinutes(e.target.value)} />
@@ -220,8 +221,10 @@ export default function BusinessConfigSettingsPage() {
           </div>
         )}
 
-        <Button className="w-fit" disabled={update.isPending} onClick={handleSave}>
-          {update.isPending ? "Saving…" : "Save business hours"}
+        {/* Temporarily disabled — saving is switched off for now; re-enable by reverting this
+           `disabled` to `update.isPending` once it should accept updates again. */}
+        <Button className="w-fit" disabled onClick={handleSave}>
+          Save business hours
         </Button>
       </div>
     </div>

@@ -1,13 +1,18 @@
 import { HTMLAttributes } from "react";
 import { cn } from "@/lib/utils";
 
-type Tone = "default" | "success" | "warning" | "destructive" | "muted";
+type Tone = "default" | "secondary" | "success" | "warning" | "destructive" | "muted" | "accent";
 
+// Every tone reads from the same semantic CSS-var tokens the rest of the app uses (see
+// globals.css) instead of hardcoded Tailwind color utilities, so the palette stays a single
+// source of truth and would respect a future dark theme automatically.
 const toneClasses: Record<Tone, string> = {
   default: "bg-primary text-primary-foreground",
-  success: "bg-green-100 text-green-800",
-  warning: "bg-amber-100 text-amber-800",
-  destructive: "bg-red-100 text-red-800",
+  secondary: "bg-secondary/10 text-secondary",
+  accent: "bg-accent/10 text-accent",
+  success: "bg-success-bg text-success",
+  warning: "bg-warning-bg text-warning",
+  destructive: "bg-destructive-bg text-destructive",
   muted: "bg-muted text-muted-foreground",
 };
 

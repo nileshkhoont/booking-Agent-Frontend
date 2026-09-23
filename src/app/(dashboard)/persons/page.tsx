@@ -10,6 +10,7 @@ import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { ErrorBanner } from "@/components/common/error-banner";
 import { EmptyState } from "@/components/common/empty-state";
 import { Pagination } from "@/components/common/pagination";
+import { ListCard } from "@/components/common/list-card";
 import { PersonFormDialog } from "@/components/persons/person-form-dialog";
 import { usePersons } from "@/features/persons/hooks";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
@@ -24,37 +25,46 @@ export default function PersonsPage() {
   const { data, isLoading, isError } = usePersons({ q: debouncedSearch || undefined, page, page_size: 20 });
 
   return (
-    <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Persons</h1>
+    <div className="flex h-full min-h-0 flex-col">
+      <div className="mb-4 flex shrink-0 justify-end">
         <Button onClick={() => setDialogOpen(true)}>
           <Plus size={16} /> Add person
         </Button>
       </div>
 
-      <div className="mb-4 flex items-center gap-2">
-        <Search size={16} className="text-muted-foreground" />
-        <Input
-          placeholder="Search by name or phone number"
-          value={search}
-          onChange={(e) => {
-            setSearch(e.target.value);
-            setPage(1);
-          }}
-          className="max-w-sm"
-        />
-      </div>
+      <ListCard
+        toolbar={
+          <div className="relative w-full max-w-sm">
+            <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <Input
+              placeholder="Search by name or phone number"
+              value={search}
+              onChange={(e) => {
+                setSearch(e.target.value);
+                setPage(1);
+              }}
+              className="pl-9"
+            />
+          </div>
+        }
+      >
+        {isLoading && <LoadingSpinner className="flex-1" />}
+        {isError && (
+          <div className="p-4">
+            <ErrorBanner message="Failed to load persons" />
+          </div>
+        )}
 
-      {isLoading && <LoadingSpinner />}
-      {isError && <ErrorBanner message="Failed to load persons" />}
+        {data && data.items.length === 0 && (
+          <div className="flex flex-1 items-center justify-center p-6">
+            <EmptyState title="No persons yet" description="Add a person or wait for the first call to come in." />
+          </div>
+        )}
 
-      {data && data.items.length === 0 && (
-        <EmptyState title="No persons yet" description="Add a person or wait for the first call to come in." />
-      )}
-
-      {data && data.items.length > 0 && (
-        <>
-          <Table>
+        {data && data.items.length > 0 && (
+          <>
+          <div className="min-h-0 flex-1">
+          <Table fillHeight bare>
             <TableHeader>
               <TableRow>
                 <TableHead>Name</TableHead>
@@ -78,9 +88,11 @@ export default function PersonsPage() {
               ))}
             </TableBody>
           </Table>
+          </div>
           <Pagination page={page} pageSize={20} total={data.total} onPageChange={setPage} />
-        </>
-      )}
+          </>
+        )}
+      </ListCard>
 
       <PersonFormDialog open={dialogOpen} onClose={() => setDialogOpen(false)} />
     </div>
