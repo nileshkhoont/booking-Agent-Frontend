@@ -1,33 +1,30 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { LogOut } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { useCurrentAdmin } from "@/features/auth/hooks";
-import { clearTokens } from "@/lib/auth";
+import { usePathname } from "next/navigation";
+import { Menu } from "lucide-react";
+import { pageTitleFor } from "@/config/site";
 
-export function Topbar() {
-  const router = useRouter();
-  const { data: admin } = useCurrentAdmin();
-
-  function handleLogout() {
-    clearTokens();
-    router.push("/login");
-  }
+/** The mobile menu trigger + the page's ONE title — pages no longer repeat their own name again
+ * as a page-level <h1> (see the per-page changes that removed it); this is the single place it's
+ * shown now, so it's sized like a real heading rather than a small label.
+ */
+export function Topbar({ onMenuClick }: { onMenuClick: () => void }) {
+  const pathname = usePathname();
+  const title = pageTitleFor(pathname);
 
   return (
-    <header className="flex h-14 items-center justify-between border-b border-border bg-card px-4">
-      <div />
-      <div className="flex items-center gap-3">
-        {admin && (
-          <span className="text-sm text-muted-foreground">
-            {admin.name} <span className="text-xs">({admin.role})</span>
-          </span>
-        )}
-        <Button variant="ghost" size="sm" onClick={handleLogout}>
-          <LogOut size={16} /> Log out
-        </Button>
-      </div>
+    <header className="sticky top-0 z-30 flex h-14 shrink-0 items-center gap-3 border-b border-border bg-card/95 px-4 backdrop-blur supports-[backdrop-filter]:bg-card/80 sm:px-6">
+      <button
+        type="button"
+        onClick={onMenuClick}
+        className="-ml-1 flex h-9 w-9 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-muted hover:text-foreground md:hidden"
+        aria-label="Open menu"
+      >
+        <Menu size={20} />
+      </button>
+      {title && (
+        <h1 className="truncate text-lg font-semibold tracking-tight sm:text-xl">{title}</h1>
+      )}
     </header>
   );
 }

@@ -40,7 +40,7 @@ export function AppointmentFormDialog({
   }
 
   return (
-    <Dialog open={open} onClose={onClose} title="Book appointment">
+    <Dialog open={open} onClose={onClose} title="Book appointment" closeOnBackdropClick={false}>
       <div className="flex flex-col gap-4">
         {createAppointment.isError && (
           <ErrorBanner

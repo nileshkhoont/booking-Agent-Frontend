@@ -34,10 +34,9 @@ export default function AppointmentDetailPage() {
 
   return (
     <div className="max-w-2xl">
-      <h1 className="mb-6 text-xl font-semibold">Appointment</h1>
       <Card>
         <CardContent className="flex flex-col gap-4 pt-6">
-          <div className="flex items-center justify-between">
+          <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="text-lg font-medium">{formatDateTime(appointment.appointment_datetime)}</p>
             <Badge tone={appointment.status === "cancelled" ? "destructive" : "success"}>
               {APPOINTMENT_STATUS_LABELS[appointment.status]}

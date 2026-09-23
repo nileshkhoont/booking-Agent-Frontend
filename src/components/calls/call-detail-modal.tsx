@@ -41,13 +41,13 @@ export function CallDetailModal({
       {callId && isError && <ErrorBanner message="Failed to load call" />}
 
       {callId && call && (
-        <div className="flex max-h-[75vh] flex-col gap-4 overflow-y-auto">
+        <div className="flex flex-col gap-4">
           <div className="flex items-center justify-between">
             <p className="text-base font-medium">{formatDateTime(call.start_time ?? call.created_at)}</p>
             <CallStatusBadge status={call.call_status} />
           </div>
 
-          <dl className="grid grid-cols-2 gap-x-4 gap-y-2 text-sm">
+          <dl className="grid grid-cols-1 gap-x-4 gap-y-2 text-sm sm:grid-cols-2">
             <dt className="text-muted-foreground">Person</dt>
             <dd>
               {person ? (

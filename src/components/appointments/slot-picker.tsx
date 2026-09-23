@@ -36,7 +36,7 @@ export function SlotPicker({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex gap-2">
+      <div className="flex flex-col gap-2 sm:flex-row">
         <Input
           type="datetime-local"
           value={value}
@@ -45,7 +45,13 @@ export function SlotPicker({
             setResult(null);
           }}
         />
-        <Button type="button" variant="outline" onClick={checkAvailability} disabled={!value || checking}>
+        <Button
+          type="button"
+          variant="outline"
+          onClick={checkAvailability}
+          disabled={!value || checking}
+          className="shrink-0"
+        >
           {checking ? "Checking…" : "Check slot"}
         </Button>
       </div>

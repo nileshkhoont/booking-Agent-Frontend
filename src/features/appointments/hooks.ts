@@ -3,7 +3,12 @@ import { appointmentsApi } from "./api";
 import type { AppointmentStatus } from "@/types/enums";
 import type { AppointmentCreatePayload } from "./types";
 
-export function useAppointments(params: { status?: AppointmentStatus; page?: number; page_size?: number }) {
+export function useAppointments(params: {
+  status?: AppointmentStatus;
+  q?: string;
+  page?: number;
+  page_size?: number;
+}) {
   return useQuery({ queryKey: ["appointments", params], queryFn: () => appointmentsApi.list(params) });
 }
 

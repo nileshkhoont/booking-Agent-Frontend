@@ -49,8 +49,7 @@ export default function AdminsSettingsPage() {
 
   return (
     <div>
-      <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-xl font-semibold">Admins</h1>
+      <div className="mb-6 flex justify-end">
         <Button onClick={() => setDialogOpen(true)}>
           <Plus size={16} /> Add admin
         </Button>
@@ -99,7 +98,12 @@ export default function AdminsSettingsPage() {
         </Table>
       )}
 
-      <Dialog open={dialogOpen} onClose={() => setDialogOpen(false)} title="Add admin">
+      <Dialog
+        open={dialogOpen}
+        onClose={() => setDialogOpen(false)}
+        title="Add admin"
+        closeOnBackdropClick={false}
+      >
         <form className="flex flex-col gap-4" onSubmit={handleSubmit(onSubmit)}>
           {createAdmin.isError && (
             <ErrorBanner

@@ -18,11 +18,19 @@ const STATUS_TONE: Record<CallScheduleStatus, "success" | "warning" | "destructi
   cancelled: "destructive",
 };
 
-export function QueueTable({ items }: { items: CallSchedule[] }) {
+export function QueueTable({
+  items,
+  fillHeight,
+  bare,
+}: {
+  items: CallSchedule[];
+  fillHeight?: boolean;
+  bare?: boolean;
+}) {
   const cancelSchedule = useCancelCallSchedule();
 
   return (
-    <Table>
+    <Table fillHeight={fillHeight} bare={bare}>
       <TableHeader>
         <TableRow>
           <TableHead>Scheduled for</TableHead>

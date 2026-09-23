@@ -3,25 +3,146 @@
 @tailwind utilities;
 
 :root {
-  --background: 0 0% 100%;
+  --background: 210 20% 98%;
   --foreground: 222 47% 11%;
   --card: 0 0% 100%;
   --card-foreground: 222 47% 11%;
-  --muted: 210 40% 96%;
-  --muted-foreground: 215 16% 47%;
-  --border: 214 32% 91%;
-  --primary: 222 47% 11%;
-  --primary-foreground: 210 40% 98%;
+  --muted: 210 30% 95%;
+  --muted-foreground: 215 16% 43%;
+  --border: 214 26% 89%;
+  --input-border: 214 26% 85%;
+  /* Primary — the brand color: solid buttons, the active pagination pill, the logo mark, avatar
+     chips. A confident indigo/violet instead of the previous near-black, which was the single
+     biggest reason the whole app read as grayscale — nearly every solid button and highlighted
+     element pulls from this one token. */
+  --primary: 243 75% 59%;
+  --primary-foreground: 0 0% 100%;
+  /* Accent — same hue family as primary on purpose (kept as its own token, not literally merged,
+     so it can be retuned independently later): links, the active nav-item highlight, input/
+     select focus rings, and the day-toggle "selected" pills all read as the one coherent brand
+     blue rather than three slightly-mismatched blues. */
+  --accent: 243 75% 59%;
+  --accent-foreground: 0 0% 100%;
+  /* Secondary — the second, genuinely distinct brand color: a rich teal, paired with primary's
+     indigo for the logo/avatar gradient and for deliberate variety elsewhere (a couple of
+     Overview stat-tile icons, the secondary Badge/Button variants) — never used so widely that
+     it starts competing with primary for attention. */
+  --secondary: 189 85% 35%;
+  --secondary-foreground: 0 0% 100%;
+  --success: 142 71% 29%;
+  --success-bg: 142 65% 90%;
+  --warning: 32 95% 34%;
+  --warning-bg: 43 90% 85%;
   --destructive: 0 72% 51%;
+  --destructive-bg: 0 85% 92%;
   --destructive-foreground: 210 40% 98%;
-  --radius: 0.5rem;
+  --ring: 243 75% 59%;
+  --radius: 0.625rem;
+  --shadow-color: 222 47% 11%;
 }
 
 * {
   border-color: hsl(var(--border));
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: hsl(var(--background));
   color: hsl(var(--foreground));
+  font-feature-settings: "cv02", "cv03", "cv04", "cv11";
+}
+
+/* A visible, on-brand focus ring for every interactive element reached by keyboard —
+   :focus-visible so mouse clicks don't show it, matching modern browser defaults. Wrapped in
+   :where() to carry zero specificity, so any component's own focus-visible:ring-* treatment
+   (Input/Select/Textarea/Button) always wins outright instead of layering two rings. */
+:where(:focus-visible) {
+  outline: 2px solid hsl(var(--ring));
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+::selection {
+  background: hsl(var(--accent) / 0.18);
+}
+
+/* Thin, unobtrusive scrollbars — visible on hover only, so tables and the mobile nav drawer
+   don't feel like they're wearing a browser chrome default. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(var(--border)) transparent;
+}
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-thumb {
+  background: hsl(var(--border));
+  border-radius: 999px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+@keyframes overlay-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes drawer-in {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.animate-overlay-in {
+  animation: overlay-in 0.15s ease-out;
+}
+.animate-dialog-in {
+  animation: dialog-in 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-drawer-in {
+  animation: drawer-in 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.animate-fade-in {
+  animation: fade-in 0.15s ease-out;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .animate-overlay-in,
+  .animate-dialog-in,
+  .animate-drawer-in,
+  .animate-fade-in {
+    animation: none;
+  }
 }
