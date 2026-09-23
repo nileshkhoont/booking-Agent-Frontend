@@ -3,12 +3,14 @@
 import { useState } from "react";
 import Link from "next/link";
 import { Select } from "@/components/ui/select";
+import { Button } from "@/components/ui/button";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/common/loading-spinner";
 import { ErrorBanner } from "@/components/common/error-banner";
 import { EmptyState } from "@/components/common/empty-state";
 import { Pagination } from "@/components/common/pagination";
+import { CallDetailModal } from "@/components/calls/call-detail-modal";
 import { useAppointments } from "@/features/appointments/hooks";
 import { APPOINTMENT_STATUS_LABELS } from "@/lib/constants";
 import { formatDateTime } from "@/lib/utils";
@@ -25,6 +27,7 @@ const STATUS_TONE: Record<AppointmentStatus, "success" | "warning" | "destructiv
 export default function AppointmentsPage() {
   const [status, setStatus] = useState<AppointmentStatus | "">("");
   const [page, setPage] = useState(1);
+  const [viewCallId, setViewCallId] = useState<string | null | undefined>(undefined);
 
   const { data, isLoading, isError } = useAppointments({
     status: status || undefined,
@@ -66,7 +69,7 @@ export default function AppointmentsPage() {
                 <TableHead>Person</TableHead>
                 <TableHead>Status</TableHead>
                 <TableHead>Source</TableHead>
-                <TableHead>Notes</TableHead>
+                <TableHead />
               </TableRow>
             </TableHeader>
             <TableBody>
@@ -95,7 +98,15 @@ export default function AppointmentsPage() {
                     </Badge>
                   </TableCell>
                   <TableCell>{appointment.booking_source}</TableCell>
-                  <TableCell className="max-w-xs truncate">{appointment.notes ?? "—"}</TableCell>
+                  <TableCell>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setViewCallId(appointment.created_by_call_id ?? null)}
+                    >
+                      View more
+                    </Button>
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -103,6 +114,12 @@ export default function AppointmentsPage() {
           <Pagination page={page} pageSize={20} total={data.total} onPageChange={setPage} />
         </>
       )}
+
+      <CallDetailModal
+        callId={viewCallId}
+        open={viewCallId !== undefined}
+        onClose={() => setViewCallId(undefined)}
+      />
     </div>
   );
 }
