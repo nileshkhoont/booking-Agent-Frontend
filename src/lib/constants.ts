@@ -1,19 +1,23 @@
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:5000/api/v1";
+const apiBaseUrl = process.env.NEXT_PUBLIC_API_BASE_URL;
+if (!apiBaseUrl) {
+  throw new Error(
+    "NEXT_PUBLIC_API_BASE_URL is not set. Add it to .env (local) or the hosting provider's environment variables (e.g. Vercel), then rebuild.",
+  );
+}
+
+export const API_BASE_URL = apiBaseUrl.replace(/\/+$/, "");
 
 export const ACCESS_TOKEN_COOKIE = "aica_access_token";
 export const REFRESH_TOKEN_COOKIE = "aica_refresh_token";
 
 export const CALL_TYPE_LABELS: Record<string, string> = {
-  inbound: "Inbound",
-  outbound_admin_scheduled: "Outbound (Admin Scheduled)",
+  inbound: "Incoming call",
+  outbound_admin_scheduled: "Outgoing call",
 };
 
 export const CALL_STATUS_LABELS: Record<string, string> = {
   answered: "Answered",
-  missed: "Missed",
-  failed: "Failed",
   busy: "Busy",
-  no_answer: "No Answer",
 };
 
 export const CALL_OUTCOME_LABELS: Record<string, string> = {
@@ -29,6 +33,11 @@ export const APPOINTMENT_STATUS_LABELS: Record<string, string> = {
   cancelled: "Cancelled",
   completed: "Completed",
   no_show: "No Show",
+};
+
+export const BOOKING_SOURCE_LABELS: Record<string, string> = {
+  inbound_call: "Incoming call",
+  admin_scheduled_call: "Outgoing call",
 };
 
 export const CALL_SCHEDULE_STATUS_LABELS: Record<string, string> = {

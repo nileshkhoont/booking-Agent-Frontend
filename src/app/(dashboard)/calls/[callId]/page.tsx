@@ -10,7 +10,7 @@ import { RecordingPlayer } from "@/components/calls/recording-player";
 import { useCall } from "@/features/calls/hooks";
 import { usePerson } from "@/features/persons/hooks";
 import { CALL_OUTCOME_LABELS, CALL_TYPE_LABELS } from "@/lib/constants";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime, formatDuration } from "@/lib/utils";
 
 export default function CallDetailPage() {
   const params = useParams<{ callId: string }>();
@@ -34,7 +34,7 @@ export default function CallDetailPage() {
             <dt className="text-muted-foreground">Outcome</dt>
             <dd>{call.outcome ? CALL_OUTCOME_LABELS[call.outcome] : "—"}</dd>
             <dt className="text-muted-foreground">Duration</dt>
-            <dd>{call.duration_seconds ? `${call.duration_seconds}s` : "—"}</dd>
+            <dd>{formatDuration(call.duration_seconds)}</dd>
             {person && (
               <>
                 <dt className="text-muted-foreground">Person</dt>

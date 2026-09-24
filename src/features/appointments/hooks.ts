@@ -6,6 +6,8 @@ import type { AppointmentCreatePayload } from "./types";
 export function useAppointments(params: {
   status?: AppointmentStatus;
   q?: string;
+  date_from?: string;
+  date_to?: string;
   page?: number;
   page_size?: number;
 }) {

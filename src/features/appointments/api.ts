@@ -4,7 +4,14 @@ import type { AppointmentStatus } from "@/types/enums";
 import type { Appointment, AppointmentCreatePayload, SlotCheckResponse } from "./types";
 
 export const appointmentsApi = {
-  list: (params: { status?: AppointmentStatus; q?: string; page?: number; page_size?: number }) =>
+  list: (params: {
+    status?: AppointmentStatus;
+    q?: string;
+    date_from?: string;
+    date_to?: string;
+    page?: number;
+    page_size?: number;
+  }) =>
     apiClient.get<Page<Appointment>>("/appointments", params),
   get: (id: string) => apiClient.get<Appointment>(`/appointments/${id}`),
   forPerson: (personId: string) => apiClient.get<Appointment[]>(`/appointments/for-person/${personId}`),

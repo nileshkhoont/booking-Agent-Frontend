@@ -29,7 +29,7 @@ export default function OverviewPage() {
     { label: "Outbound Calls", value: data.outbound_calls, icon: PhoneOutgoing, tone: "accent" },
     { label: "Admin Scheduled Calls", value: data.admin_scheduled_calls, icon: UserCog, tone: "secondary" },
     { label: "Agent Scheduled Calls", value: data.agent_scheduled_calls, icon: Bot, tone: "secondary" },
-    { label: "Failed Calls", value: data.failed_calls, icon: PhoneMissed, tone: "destructive" },
+    { label: "Missed Calls", value: data.missed_calls, icon: PhoneMissed, tone: "destructive" },
   ];
 
   const toneClasses: Record<(typeof tiles)[number]["tone"], string> = {

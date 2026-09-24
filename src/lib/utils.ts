@@ -46,3 +46,26 @@ export function istDateInputToUtcIso(dateValue: string): string {
 export function istDateInputEndOfDayToUtcIso(dateValue: string): string {
   return new Date(`${dateValue}T23:59:59.999+05:30`).toISOString();
 }
+
+/** Today's calendar date in IST as a `YYYY-MM-DD` string (what `<input type="date">` uses) — fixed
+ * to IST rather than the browser's own timezone, since every date the admin sees is IST.
+ */
+export function todayIstDateInput(): string {
+  return new Intl.DateTimeFormat("en-CA", { timeZone: "Asia/Kolkata" }).format(new Date());
+}
+
+/** Seconds as a readable duration, e.g. 155 -> "2 min 35 sec", 45 -> "45 sec", 300 -> "5 min",
+ * 3725 -> "1 hr 2 min 5 sec". A missing or zero duration is an em dash.
+ */
+export function formatDuration(totalSeconds: number | null | undefined): string {
+  if (!totalSeconds || totalSeconds < 0) return "—";
+  const seconds = Math.round(totalSeconds);
+  const hours = Math.floor(seconds / 3600);
+  const minutes = Math.floor((seconds % 3600) / 60);
+  const secs = seconds % 60;
+  const parts = [];
+  if (hours) parts.push(`${hours} hr`);
+  if (minutes) parts.push(`${minutes} min`);
+  if (secs || parts.length === 0) parts.push(`${secs} sec`);
+  return parts.join(" ");
+}

@@ -17,31 +17,48 @@ import { ListCard } from "@/components/common/list-card";
 import { QueueTable } from "@/components/schedule/queue-table";
 import { useCallSchedules } from "@/features/schedule/hooks";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
+import { istDateInputEndOfDayToUtcIso, istDateInputToUtcIso } from "@/lib/utils";
 import { CALL_SCHEDULE_STATUS_LABELS } from "@/lib/constants";
 import type { CallScheduleStatus } from "@/types/enums";
 
+interface QueueFilters {
+  status: CallScheduleStatus | "";
+  dateFrom: string;
+  dateTo: string;
+}
+
+const EMPTY_FILTERS: QueueFilters = { status: "", dateFrom: "", dateTo: "" };
+
+// The date range counts as ONE active filter however many of its ends are set.
+function countActiveFilters(filters: QueueFilters) {
+  return (filters.status ? 1 : 0) + (filters.dateFrom || filters.dateTo ? 1 : 0);
+}
+
 export default function SchedulePage() {
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState<CallScheduleStatus | "">("missed");
-  const [draftStatus, setDraftStatus] = useState<CallScheduleStatus | "">("missed");
+  // Opens on the Missed queue, all dates — missed calls are historical, so no default date range.
+  const [filters, setFilters] = useState<QueueFilters>({ ...EMPTY_FILTERS, status: "missed" });
+  const [draft, setDraft] = useState<QueueFilters>(EMPTY_FILTERS);
   const [filterOpen, setFilterOpen] = useState(false);
   const [page, setPage] = useState(1);
   const debouncedSearch = useDebouncedValue(search);
 
   const { data, isLoading, isError } = useCallSchedules({
-    status: status || undefined,
+    status: filters.status || undefined,
     q: debouncedSearch || undefined,
+    date_from: filters.dateFrom ? istDateInputToUtcIso(filters.dateFrom) : undefined,
+    date_to: filters.dateTo ? istDateInputEndOfDayToUtcIso(filters.dateTo) : undefined,
     page,
     page_size: 20,
   });
 
   function openFilters() {
-    setDraftStatus(status);
+    setDraft(filters);
     setFilterOpen(true);
   }
 
   function applyFilters() {
-    setStatus(draftStatus);
+    setFilters(draft);
     setPage(1);
     setFilterOpen(false);
   }
@@ -70,7 +87,7 @@ export default function SchedulePage() {
                 className="pl-9"
               />
             </div>
-            <FilterButton activeCount={status ? 1 : 0} onClick={openFilters} />
+            <FilterButton activeCount={countActiveFilters(filters)} onClick={openFilters} />
           </>
         }
       >
@@ -82,7 +99,7 @@ export default function SchedulePage() {
         )}
         {data && data.items.length === 0 && (
           <div className="flex flex-1 items-center justify-center p-6">
-            <EmptyState title="Nothing in the queue for this filter" />
+            <EmptyState title="Nothing in the queue for these filters" />
           </div>
         )}
 
@@ -100,14 +117,30 @@ export default function SchedulePage() {
         open={filterOpen}
         onClose={() => setFilterOpen(false)}
         onApply={applyFilters}
-        onClear={() => setDraftStatus("")}
+        onClear={() => setDraft(EMPTY_FILTERS)}
         title="Filter queue"
       >
+        <div className="flex flex-col gap-1.5">
+          <Label>From</Label>
+          <Input
+            type="date"
+            value={draft.dateFrom}
+            onChange={(e) => setDraft((d) => ({ ...d, dateFrom: e.target.value }))}
+          />
+        </div>
+        <div className="flex flex-col gap-1.5">
+          <Label>To</Label>
+          <Input
+            type="date"
+            value={draft.dateTo}
+            onChange={(e) => setDraft((d) => ({ ...d, dateTo: e.target.value }))}
+          />
+        </div>
         <div className="flex flex-col gap-1.5 sm:col-span-2">
           <Label>Status</Label>
           <Select
-            value={draftStatus}
-            onChange={(e) => setDraftStatus(e.target.value as CallScheduleStatus | "")}
+            value={draft.status}
+            onChange={(e) => setDraft((d) => ({ ...d, status: e.target.value as CallScheduleStatus | "" }))}
           >
             <option value="">All statuses</option>
             {Object.entries(CALL_SCHEDULE_STATUS_LABELS).map(([value, label]) => (

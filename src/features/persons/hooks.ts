@@ -17,6 +17,18 @@ export function usePerson(id: string | undefined) {
   });
 }
 
+/** Exact-match check for "does a person with this number already exist" — `phone` should already
+ * be normalised; pass undefined to skip the request.
+ */
+export function usePersonByPhone(phone: string | undefined) {
+  return useQuery({
+    queryKey: ["persons", "by-phone", phone],
+    queryFn: () => personsApi.lookupByPhone(phone as string),
+    enabled: Boolean(phone),
+    staleTime: 0,
+  });
+}
+
 export function useCreatePerson() {
   const queryClient = useQueryClient();
   return useMutation({

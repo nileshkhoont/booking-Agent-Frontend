@@ -5,7 +5,7 @@ export type BookingSource = "inbound_call" | "admin_scheduled_call";
 
 export type CallType = "inbound" | "outbound_admin_scheduled";
 export type Direction = "inbound" | "outbound";
-export type CallStatus = "answered" | "missed" | "failed" | "busy" | "no_answer";
+export type CallStatus = "answered" | "busy";
 export type CallOutcome =
   | "appointment_booked"
   | "appointment_rescheduled"

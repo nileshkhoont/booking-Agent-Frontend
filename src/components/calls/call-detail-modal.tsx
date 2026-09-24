@@ -9,7 +9,7 @@ import { RecordingPlayer } from "@/components/calls/recording-player";
 import { useCall } from "@/features/calls/hooks";
 import { usePerson } from "@/features/persons/hooks";
 import { CALL_OUTCOME_LABELS, CALL_TYPE_LABELS } from "@/lib/constants";
-import { formatDateTime } from "@/lib/utils";
+import { formatDateTime, formatDuration } from "@/lib/utils";
 
 /**
  * Shared "View more" detail panel for both the Calls and Appointments tables — opened from
@@ -63,7 +63,7 @@ export function CallDetailModal({
             <dt className="text-muted-foreground">Outcome</dt>
             <dd>{call.outcome ? CALL_OUTCOME_LABELS[call.outcome] : "—"}</dd>
             <dt className="text-muted-foreground">Duration</dt>
-            <dd>{call.duration_seconds ? `${call.duration_seconds}s` : "—"}</dd>
+            <dd>{formatDuration(call.duration_seconds)}</dd>
             {call.appointment_id && (
               <>
                 <dt className="text-muted-foreground">Appointment</dt>

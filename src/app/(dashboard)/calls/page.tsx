@@ -15,12 +15,13 @@ import { Pagination } from "@/components/common/pagination";
 import { FilterButton } from "@/components/common/filter-button";
 import { FilterDialog } from "@/components/common/filter-dialog";
 import { ListCard } from "@/components/common/list-card";
+import { CallDirectionLabel } from "@/components/common/call-direction-label";
 import { CallStatusBadge } from "@/components/calls/call-status-badge";
 import { CallDetailModal } from "@/components/calls/call-detail-modal";
 import { useCalls } from "@/features/calls/hooks";
 import { useDebouncedValue } from "@/hooks/use-debounced-value";
 import { CALL_OUTCOME_LABELS, CALL_TYPE_LABELS } from "@/lib/constants";
-import { formatDateTime, istDateInputEndOfDayToUtcIso, istDateInputToUtcIso } from "@/lib/utils";
+import { formatDateTime, formatDuration, istDateInputEndOfDayToUtcIso, istDateInputToUtcIso } from "@/lib/utils";
 import type { CallOutcome, CallStatus, CallType } from "@/types/enums";
 
 interface CallFilters {
@@ -136,11 +137,16 @@ export default function CallsPage() {
                       <p className="text-xs text-muted-foreground">{call.person_phone_number}</p>
                     )}
                   </TableCell>
-                  <TableCell>{CALL_TYPE_LABELS[call.call_type]}</TableCell>
+                  <TableCell>
+                    <CallDirectionLabel
+                      incoming={call.call_type === "inbound"}
+                      label={CALL_TYPE_LABELS[call.call_type] ?? call.call_type}
+                    />
+                  </TableCell>
                   <TableCell>
                     <CallStatusBadge status={call.call_status} />
                   </TableCell>
-                  <TableCell>{call.duration_seconds ? `${call.duration_seconds}s` : "—"}</TableCell>
+                  <TableCell>{formatDuration(call.duration_seconds)}</TableCell>
                   <TableCell>
                     <Button variant="outline" size="sm" onClick={() => setViewCallId(call.id)}>
                       View more
@@ -201,10 +207,7 @@ export default function CallsPage() {
           >
             <option value="">All statuses</option>
             <option value="answered">Answered</option>
-            <option value="missed">Missed</option>
-            <option value="failed">Failed</option>
             <option value="busy">Busy</option>
-            <option value="no_answer">No Answer</option>
           </Select>
         </div>
         <div className="flex flex-col gap-1.5">
