@@ -8,6 +8,8 @@ export const scheduleApi = {
     status?: CallScheduleStatus;
     call_purpose?: CallPurpose;
     q?: string;
+    date_from?: string;
+    date_to?: string;
     page?: number;
     page_size?: number;
   }) => apiClient.get<Page<CallSchedule>>("/call-schedules", params),

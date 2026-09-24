@@ -1,9 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { RotateCcw } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
+import { Button, buttonClasses } from "@/components/ui/button";
 import { useCancelCallSchedule } from "@/features/schedule/hooks";
 import { CALL_PURPOSE_LABELS, CALL_SCHEDULE_STATUS_LABELS } from "@/lib/constants";
 import { formatDateTime } from "@/lib/utils";
@@ -37,7 +38,7 @@ export function QueueTable({
           <TableHead>Person</TableHead>
           <TableHead>Purpose</TableHead>
           <TableHead>Status</TableHead>
-          <TableHead>Instructions</TableHead>
+          <TableHead>Notes</TableHead>
           <TableHead />
         </TableRow>
       </TableHeader>
@@ -63,7 +64,9 @@ export function QueueTable({
             <TableCell>
               <Badge tone={STATUS_TONE[schedule.status]}>{CALL_SCHEDULE_STATUS_LABELS[schedule.status]}</Badge>
             </TableCell>
-            <TableCell className="max-w-xs truncate">{schedule.admin_instructions ?? "—"}</TableCell>
+            <TableCell className="max-w-xs truncate" title={schedule.notes ?? undefined}>
+              {schedule.notes ?? "—"}
+            </TableCell>
             <TableCell>
               {schedule.status === "pending" && (
                 <Button
@@ -74,6 +77,14 @@ export function QueueTable({
                 >
                   Cancel
                 </Button>
+              )}
+              {schedule.status === "missed" && (
+                <Link
+                  href={`/schedule/new?person_id=${schedule.person_id}`}
+                  className={buttonClasses("outline", "sm")}
+                >
+                  <RotateCcw size={14} /> Re-schedule
+                </Link>
               )}
             </TableCell>
           </TableRow>

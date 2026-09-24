@@ -5,5 +5,5 @@ export interface DashboardStats {
   outbound_calls: number;
   admin_scheduled_calls: number;
   agent_scheduled_calls: number;
-  failed_calls: number;
+  missed_calls: number;
 }

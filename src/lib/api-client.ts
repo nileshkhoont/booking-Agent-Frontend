@@ -11,6 +11,13 @@ export class ApiError extends Error {
   }
 }
 
+// ngrok's free tier answers browser requests with an HTML interstitial (no CORS headers, so the
+// browser reports it as a CORS error) unless this header is present. Only sent when the API is
+// actually behind ngrok, so a real production backend sees no extra header.
+const EXTRA_HEADERS: Record<string, string> = API_BASE_URL.includes("ngrok")
+  ? { "ngrok-skip-browser-warning": "true" }
+  : {};
+
 let refreshPromise: Promise<boolean> | null = null;
 
 async function tryRefreshToken(): Promise<boolean> {
@@ -20,7 +27,7 @@ async function tryRefreshToken(): Promise<boolean> {
   if (!refreshPromise) {
     refreshPromise = fetch(`${API_BASE_URL}/auth/refresh`, {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: { "Content-Type": "application/json", ...EXTRA_HEADERS },
       body: JSON.stringify({ refresh_token: refreshToken }),
     })
       .then(async (res) => {
@@ -60,7 +67,7 @@ export async function apiFetch<T>(path: string, options: RequestOptions = {}): P
   const { method = "GET", body, params, skipAuth = false } = options;
 
   const doFetch = async (): Promise<Response> => {
-    const headers: Record<string, string> = { "Content-Type": "application/json" };
+    const headers: Record<string, string> = { "Content-Type": "application/json", ...EXTRA_HEADERS };
     if (!skipAuth) {
       const token = getAccessToken();
       if (token) headers.Authorization = `Bearer ${token}`;

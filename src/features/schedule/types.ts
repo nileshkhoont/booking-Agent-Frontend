@@ -11,6 +11,7 @@ export interface CallSchedule {
   requested_by: RequestedBy;
   source_call_id?: string | null;
   admin_instructions?: string | null;
+  notes?: string | null;
   status: CallScheduleStatus;
   created_by?: string | null;
   edesy_call_id?: string | null;
@@ -22,4 +23,5 @@ export interface CallScheduleCreatePayload {
   appointment_id?: string;
   scheduled_at: string;
   admin_instructions?: string;
+  notes?: string;
 }

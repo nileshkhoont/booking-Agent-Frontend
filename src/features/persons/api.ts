@@ -6,6 +6,7 @@ export const personsApi = {
   list: (params: { q?: string; page?: number; page_size?: number }) =>
     apiClient.get<Page<Person>>("/persons", params),
   get: (id: string) => apiClient.get<Person>(`/persons/${id}`),
+  lookupByPhone: (phone_number: string) => apiClient.get<Person | null>("/persons/lookup", { phone_number }),
   create: (payload: PersonCreatePayload) => apiClient.post<Person>("/persons", payload),
   update: (id: string, payload: Partial<PersonCreatePayload>) =>
     apiClient.patch<Person>(`/persons/${id}`, payload),
